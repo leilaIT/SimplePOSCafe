@@ -18,9 +18,9 @@ namespace SimplePOSCafe
         //You may use more than one csv file for this project. [DONE]
         //The POS you will be making for the café must use a menu, [DONE]
         //the menu should not be hardcoded into the program but must be referenced.
-        //Transaction history must also be kept track of.
         //The POS must also print out receipts for the customers.
-
+        //Transaction history must also be kept track of. (idea: use datetime)
+        
         //FLOW
         //after selecting category
         //  ask: would you like to add an order or go back to main page? [DONE]
@@ -31,19 +31,13 @@ namespace SimplePOSCafe
         //      -gp back to main menu [DONE]
 
         static List<food_items> selected_foods = new List<food_items>();
+        static int totalPrice = 0;
         static void Main(string[] args)
         {
-            //Dictionary<string, List<string[]>> menu = new Dictionary<string, List<string[]>>();
-
-            //store food items from CSV to program
-            //List<food_items> foods = new List<food_items>();
-            //foods.Add(new food_items("Alldrinks.csv"));
-            //foods.Add(new food_items("Alldesserts.csv"));
-
             allFood drinks = new allFood("Alldrinks.csv");
             allFood desserts = new allFood("Alldesserts.csv");
+            order ordr = new order();
             string ans = "";
-            bool order = true;
 
             //start menu
             while(true)
@@ -78,7 +72,8 @@ namespace SimplePOSCafe
                 }
                 else if(ans == "C")
                 {
-
+                    ordr.processPayment(selected_foods, totalPrice);
+                    break;
                 }
                 else if (ans == "D")
                 {
@@ -141,11 +136,14 @@ namespace SimplePOSCafe
         {
             Console.WriteLine("—————————————————————————————————");
             Console.WriteLine($"Your orders: {selected_foods.Count}");
-
+            
             foreach (food_items food in selected_foods)
             {
                 Console.WriteLine($"{food.food_id()} | {food.name()} : {food.price()}");
+                totalPrice += food.price();
             }
+
+            Console.WriteLine($"\nCurrent price total: {totalPrice}");
         }
     }
 }

@@ -51,23 +51,63 @@ namespace SimplePOSCafe
         {
             string choice = "";
             choice = getFoodInput("");
+            int quant = 0;
+            int amount = 0;
+            string nameNum = "";
+            string inp = "";
+
+            quant = getFoodQuant(quant);
 
             foreach (food_items food in foods)
             {
                 if (food.food_id() == choice)
                 {
-                    selected.Add(food);
-                    Console.WriteLine("Order Added!\n Press any key to resume. . .");
+                    amount = food.price() * quant;
+                    nameNum = quant + " " + food.name();
+                    food_items selectedFood = new food_items(food.food_id(), nameNum, amount);
+                    selected.Add(selectedFood);
+                    Console.WriteLine("\nOrder Added! Press any key to resume. . .");
                     Console.ReadKey();
                     break;
                 }
             }
             return selected;
         }
+        public int getFoodQuant(int quant)
+        {
+            string input = "";
+
+            while (true)
+            {
+                Console.WriteLine("\nHow many would you like to order?");
+                input = Console.ReadLine();
+                if (int.TryParse(input, out quant))
+                    break;
+                else
+                    Console.WriteLine("Invalid input");
+            }
+            return quant;
+        }
         public string getFoodInput (string input)
         {
-            Console.WriteLine("Select the ID of your chosen order: ");
-            input = Console.ReadLine().ToUpper();
+            bool cont = true;
+
+            while(cont)
+            {
+                Console.WriteLine("Select the ID of your chosen order: ");
+                input = Console.ReadLine().ToUpper();
+                foreach (food_items food in foods)
+                {
+                    if (food.food_id() == input)
+                    {
+                        cont = false;
+                        break;
+                    }
+                }
+                if(cont)
+                    Console.WriteLine("System does not contain that ID.\n");
+            }
+            
             return input;
         }
     }
