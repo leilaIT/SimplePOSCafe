@@ -40,12 +40,8 @@ namespace SimplePOSCafe
         }
         public void displayContents()
         {
-            Console.Clear();
             foreach(food_items food in foods)
-            {
                 Console.WriteLine($"{food.food_id()} | {food.name()}: Php{food.price()}");
-            }
-            Console.ResetColor();
         }
         public List<food_items> getFoods(List<food_items> selected)
         {
@@ -66,7 +62,9 @@ namespace SimplePOSCafe
                     nameNum = quant + " " + food.name();
                     food_items selectedFood = new food_items(food.food_id(), nameNum, amount);
                     selected.Add(selectedFood);
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine("\nOrder Added! Press any key to resume. . .");
+                    Console.ResetColor();
                     Console.ReadKey();
                     break;
                 }
@@ -79,12 +77,20 @@ namespace SimplePOSCafe
 
             while (true)
             {
+                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.Black;
                 Console.WriteLine("\nHow many would you like to order?");
+                Console.ResetColor();
                 input = Console.ReadLine();
                 if (int.TryParse(input, out quant))
                     break;
                 else
+                {
+                    Console.BackgroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = ConsoleColor.Black;
                     Console.WriteLine("Invalid input");
+                    Console.ResetColor();
+                }
             }
             return quant;
         }
@@ -92,9 +98,12 @@ namespace SimplePOSCafe
         {
             bool cont = true;
 
-            while(cont)
+            while (cont)
             {
-                Console.WriteLine("Select the ID of your chosen order: ");
+                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.WriteLine("\nSelect the ID of your chosen order: ");
+                Console.ResetColor();
                 input = Console.ReadLine().ToUpper();
                 foreach (food_items food in foods)
                 {
@@ -104,8 +113,12 @@ namespace SimplePOSCafe
                         break;
                     }
                 }
-                if(cont)
-                    Console.WriteLine("System does not contain that ID.\n");
+                if (cont)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine("System does not contain that ID.");
+                    Console.ResetColor();
+                }
             }
             
             return input;
