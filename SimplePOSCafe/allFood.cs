@@ -13,8 +13,6 @@ namespace SimplePOSCafe
         private string[] tempArr = new string[] { };
         private string tempWord = "";
         public List<food_items> foods = new List<food_items>();
-        public List<food_items> selected_foods = new List<food_items>();
-
         public allFood(string fileName)
         {
             using (StreamReader sr = new StreamReader(fileName))
@@ -50,7 +48,6 @@ namespace SimplePOSCafe
             int quant = 0;
             int amount = 0;
             string nameNum = "";
-            string inp = "";
 
             quant = getFoodQuant(quant);
 

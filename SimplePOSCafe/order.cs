@@ -10,6 +10,24 @@ namespace SimplePOSCafe
 {
     internal class order
     {
+        private DateTime dtnow = DateTime.Now;
+        public int displayCurrent(List<food_items> selected_foods)
+        {
+            int totalPrice = 0;
+            Console.WriteLine("—————————————————————————————————");
+            Console.WriteLine($"Your orders: {selected_foods.Count}");
+
+            foreach (food_items food in selected_foods)
+            {
+                Console.WriteLine($"{food.food_id()} | {food.name()} : {food.price()}");
+                totalPrice += food.price();
+            }
+
+            Console.WriteLine($"\nCurrent price total: {totalPrice}\n");
+            Console.WriteLine("—————————————————————————————————");
+
+            return totalPrice;
+        }
         public void processPayment(List<food_items> selected_foods, int totalPrice)
         {
             int payment = 0;
@@ -69,26 +87,8 @@ namespace SimplePOSCafe
             //print receipt
             printReceipt(selected_foods, totalPrice, change, payment);
         }
-        public int displayCurrent(List<food_items> selected_foods)
-        {
-            int totalPrice = 0;
-            Console.WriteLine("—————————————————————————————————");
-            Console.WriteLine($"Your orders: {selected_foods.Count}");
-
-            foreach (food_items food in selected_foods)
-            {
-                Console.WriteLine($"{food.food_id()} | {food.name()} : {food.price()}");
-                totalPrice += food.price();
-            }
-
-            Console.WriteLine($"\nCurrent price total: {totalPrice}\n");
-            Console.WriteLine("—————————————————————————————————");
-            
-            return totalPrice;
-        }
         private void printReceipt(List<food_items> selected_foods, int totalPrice, int change, int payment)
         {
-            DateTime dtnow = DateTime.Now;
             int numSpace = 0;
             string spaces = "";
             using (StreamWriter sw = new StreamWriter("Order Receipt.txt"))
@@ -117,6 +117,20 @@ namespace SimplePOSCafe
                 sw.WriteLine(" ———————————————————————————————— ");
                 sw.WriteLine("Thank you. We hope you come again!");
                 sw.WriteLine(" ———————————————————————————————— ");
+            }
+        }
+        public void transactionHistory(string transactID, List<food_items> food_sold, int totalPrice)
+        {
+            string fileName = "Transaction History.txt";
+            using (StreamWriter sw = new StreamWriter(fileName, true))
+            {
+                if (transactID != "TR1")
+                    sw.WriteLine();
+                sw.Write(transactID + " | ");
+                sw.Write(dtnow + " | ");
+                foreach (food_items food in food_sold)
+                    sw.Write($"{food.name()}, ");
+                sw.Write($" | Php{totalPrice}");
             }
         }
     }

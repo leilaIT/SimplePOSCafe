@@ -5,6 +5,7 @@ using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,16 +20,7 @@ namespace SimplePOSCafe
         //The POS you will be making for the café must use a menu, [DONE]
         //the menu should not be hardcoded into the program but must be referenced. [DONE]
         //The POS must also print out receipts for the customers. [DONE]
-        //Transaction history must also be kept track of. (idea: use datetime)
-        
-        //FLOW
-        //after selecting category
-        //  ask: would you like to add an order or go back to main page? [DONE]
-        //  if a (chooses to order)
-        //      -add chosen order info to current order list [DONE]
-        //      -go back to main menu [DONE]
-        //  else b(doesnt want to order from the options)
-        //      -gp back to main menu [DONE]
+        //Transaction history must also be kept track of. (idea: use datetime) [DONE]
 
         static List<food_items> selected_foods = new List<food_items>();
         static int totalPrice = 0;
@@ -71,7 +63,29 @@ namespace SimplePOSCafe
                 }
             }
             Console.WriteLine("Thank you. We hope you come again!\nPress any key to exit. . .");
+            ordr.transactionHistory(readTransactFile(), selected_foods, totalPrice);
             Console.ReadKey();
+        }
+        static string readTransactFile()
+        {
+            List<string> transactLines = new List<string>();
+            string transactID = "";
+            try
+            {
+                string line = "";
+                using (StreamReader sr = new StreamReader("Transaction History.txt"))
+                {
+                    while ((line = sr.ReadLine()) != null)
+                        transactLines.Add(line);
+                    transactID = "TR" + (transactLines.Count + 1);
+                }
+            }
+            catch (Exception e)
+            {
+                transactID = "TR1";
+                Console.WriteLine();
+            }
+            return transactID;
         }
         static void foodOption(allFood fOption, ConsoleColor fColor)
         {
@@ -134,14 +148,22 @@ namespace SimplePOSCafe
         static bool orderStatus()
         {
             bool cont = true;
+            string ans = "";
             Console.BackgroundColor = ConsoleColor.Yellow;
             Console.ForegroundColor = ConsoleColor.Black;
-            Console.WriteLine("\nWould you like to order or return to main menu?");
-            Console.ResetColor();
-            Console.WriteLine("[O] - Order\n" +
-                              "[R] - Return");
-            if(uInput("") == "R")
-                cont = false;
+            
+            while(ans != "O" && ans != "R")
+            {
+                Console.WriteLine("\nWould you like to order or return to main menu?");
+                Console.ResetColor();
+                Console.WriteLine("[O] - Order\n" +
+                                  "[R] - Return");
+                ans = uInput("");
+                if (ans == "O")
+                    break;
+                else if(ans == "R") 
+                    cont = false;
+            }
             return cont;
         }
     }
