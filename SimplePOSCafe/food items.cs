@@ -9,41 +9,26 @@ namespace SimplePOSCafe
 {
     internal class food_items
     {
-        private List<string[]> items = new List<string[]>();
-        private string[] tempArr = new string[] { };
-        private string tempWord = "";
-        public food_items(string fileName)
+        private string foodName = "";
+        private int foodPrice = 0;
+        private string foodid = "";
+        public food_items(string fId, string fName, int fPricw)
         {
-            using (StreamReader sr = new StreamReader(fileName))
-            {
-                string line = "";
-                while ((line = sr.ReadLine()) != null)
-                {
-                    tempArr = line.Split(',');
-                    //remove space from word
-                    for (int x = 0; x < tempArr.Length; x++)
-                    {
-                        if (tempArr[x][0] == ' ') //if first letter is space
-                        {
-                            tempWord = tempArr[x];
-                            tempArr[x] = "";
-                            for (int i = 1; i < tempWord.Length; i++)
-                                tempArr[x] += tempWord[i];
-                        }
-                    }
-                    items.Add(tempArr);
-                }
-            }
+           foodid = fId;
+           foodName = fName;
+           foodPrice = fPricw;
         }
-        public void displayItem()
+        public string food_id()
         {
-            for (int x = 0; x < items.Count; x++)
-            {
-                for (int y = 0; y < items[x].Length; y++)
-                {
-                    Console.WriteLine(items[x][y]);
-                }
-            }
+            return foodid;
+        }
+        public string name()
+        { 
+            return foodName; 
+        }
+        public int price()
+        {
+            return foodPrice;
         }
     }
 }
