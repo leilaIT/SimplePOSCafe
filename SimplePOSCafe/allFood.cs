@@ -83,8 +83,7 @@ namespace SimplePOSCafe
                     break;
                 else
                 {
-                    Console.BackgroundColor = ConsoleColor.Yellow;
-                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine("Invalid input");
                     Console.ResetColor();
                 }

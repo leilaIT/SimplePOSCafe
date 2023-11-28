@@ -14,26 +14,25 @@ namespace SimplePOSCafe
 {
     internal class Program
     {
-        //SCENARIO
-        //Using csv files as a pseudo database create a simple POS for a café. [DONE]
-        //You may use more than one csv file for this project. [DONE]
-        //The POS you will be making for the café must use a menu, [DONE]
-        //the menu should not be hardcoded into the program but must be referenced. [DONE]
-        //The POS must also print out receipts for the customers. [DONE]
-        //Transaction history must also be kept track of. (idea: use datetime) [DONE]
-
         static List<food_items> selected_foods = new List<food_items>();
         static int totalPrice = 0;
         static order ordr = new order();
 
         static void Main(string[] args)
         {
+            POS();
+
+            Console.WriteLine("Thank you. We hope you come again!\nPress any key to exit. . .");
+            ordr.transactionHistory(readTransactFile(), selected_foods, totalPrice);
+            Console.ReadKey();
+        }
+        static void POS()
+        {
             allFood drinks = new allFood("Alldrinks.csv");
             allFood desserts = new allFood("Alldesserts.csv");
             string ans = "";
 
-            //start menu
-            while(true)
+            while (true)
             {
                 Console.Clear();
                 ans = startMenu();
@@ -43,7 +42,7 @@ namespace SimplePOSCafe
                     foodOption(drinks, ConsoleColor.DarkYellow);
                 else if (ans == "B")
                     foodOption(desserts, ConsoleColor.DarkGreen);
-                else if(ans == "C")
+                else if (ans == "C")
                 {
                     if (selected_foods.Count > 0)
                     {
@@ -62,9 +61,6 @@ namespace SimplePOSCafe
                     break;
                 }
             }
-            Console.WriteLine("Thank you. We hope you come again!\nPress any key to exit. . .");
-            ordr.transactionHistory(readTransactFile(), selected_foods, totalPrice);
-            Console.ReadKey();
         }
         static string readTransactFile()
         {
@@ -73,17 +69,16 @@ namespace SimplePOSCafe
             try
             {
                 string line = "";
-                using (StreamReader sr = new StreamReader("Transaction History.txt"))
+                using (StreamReader sr = new StreamReader("Transaction History.csv"))
                 {
                     while ((line = sr.ReadLine()) != null)
                         transactLines.Add(line);
-                    transactID = "TR" + (transactLines.Count + 1);
+                    transactID = "TR" + (transactLines.Count);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 transactID = "TR1";
-                Console.WriteLine();
             }
             return transactID;
         }
@@ -149,11 +144,11 @@ namespace SimplePOSCafe
         {
             bool cont = true;
             string ans = "";
-            Console.BackgroundColor = ConsoleColor.Yellow;
-            Console.ForegroundColor = ConsoleColor.Black;
             
             while(ans != "O" && ans != "R")
             {
+                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.Black;
                 Console.WriteLine("\nWould you like to order or return to main menu?");
                 Console.ResetColor();
                 Console.WriteLine("[O] - Order\n" +

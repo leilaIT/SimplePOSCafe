@@ -108,7 +108,6 @@ namespace SimplePOSCafe
                         numSpace = 0;
                     spaces = new string(' ', numSpace);
                     sw.WriteLine($"{food.food_id()} | {food.name()}{spaces}: Php{food.price()}");
-                    totalPrice += food.price();
                 }
                 sw.WriteLine(" ———————————————————————————————— ");
                 sw.WriteLine($"Total:                   Php{totalPrice}");
@@ -121,16 +120,17 @@ namespace SimplePOSCafe
         }
         public void transactionHistory(string transactID, List<food_items> food_sold, int totalPrice)
         {
-            string fileName = "Transaction History.txt";
+            string fileName = "Transaction History.csv";
+            
             using (StreamWriter sw = new StreamWriter(fileName, true))
             {
-                if (transactID != "TR1")
-                    sw.WriteLine();
-                sw.Write(transactID + " | ");
-                sw.Write(dtnow + " | ");
+                if (transactID == "TR1")
+                    sw.Write($"ID, DATE AND TIME, FOOD NAME, TOTAL PRICE");
+                sw.WriteLine();
+                sw.Write($"{transactID}, {dtnow}, ");
                 foreach (food_items food in food_sold)
-                    sw.Write($"{food.name()}, ");
-                sw.Write($" | Php{totalPrice}");
+                    sw.Write($"{food.name()} ");
+                sw.Write($", Php{totalPrice}");
             }
         }
     }
