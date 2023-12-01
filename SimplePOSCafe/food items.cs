@@ -10,9 +10,9 @@ namespace SimplePOSCafe
     internal class food_items
     {
         private string foodName = "";
-        private int foodPrice = 0;
+        private double foodPrice = 0;
         private string foodid = "";
-        public food_items(string fId, string fName, int fPricw)
+        public food_items(string fId, string fName, double fPricw)
         {
            foodid = fId;
            foodName = fName;
@@ -26,7 +26,7 @@ namespace SimplePOSCafe
         { 
             return foodName; 
         }
-        public int price()
+        public double price()
         {
             return foodPrice;
         }

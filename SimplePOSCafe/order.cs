@@ -11,10 +11,10 @@ namespace SimplePOSCafe
     internal class order
     {
         private DateTime dtnow = DateTime.Now;
-        public int displayCurrent(List<food_items> selected_foods)
+        public double displayCurrent(List<food_items> selected_foods)
         {
-            int totalPrice = 0;
-            Console.WriteLine("—————————————————————————————————");
+            double totalPrice = 0;
+            Console.WriteLine("—————————————————————————————————\n");
             Console.WriteLine($"Your orders: {selected_foods.Count}");
 
             foreach (food_items food in selected_foods)
@@ -28,34 +28,33 @@ namespace SimplePOSCafe
 
             return totalPrice;
         }
-        public void processPayment(List<food_items> selected_foods, int totalPrice)
+        public void processPayment(List<food_items> selected_foods, double totalPrice)
         {
-            int payment = 0;
-            int change = 0;
-            //show all orders and total price
+            double payment = 0;
+            double change = 0;
+            
             Console.Clear();
             Console.BackgroundColor = ConsoleColor.Yellow;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("Payment");
             Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("Here are your order(s) along with the total price:");
+            Console.ResetColor();
             totalPrice = displayCurrent(selected_foods);
 
             while (true)
             {
-                //ask user for payment
                 Console.BackgroundColor = ConsoleColor.Yellow;
                 Console.ForegroundColor = ConsoleColor.Black;
                 while(true)
                 {
                     Console.WriteLine("Please enter payment amount: ");
                     Console.ResetColor();
-                    //payment = int.Parse(Console.ReadLine());
-                    if(int.TryParse(Console.ReadLine(), out payment))
+                    if(double.TryParse(Console.ReadLine(), out payment))
                         break;
                 }
 
-                //process payment
                 if (payment >= totalPrice)
                 {
                     change = payment - totalPrice;
@@ -84,10 +83,9 @@ namespace SimplePOSCafe
             Console.WriteLine($"\n\nYour change is: Php{change}");
             Console.ResetColor();
 
-            //print receipt
             printReceipt(selected_foods, totalPrice, change, payment);
         }
-        private void printReceipt(List<food_items> selected_foods, int totalPrice, int change, int payment)
+        private void printReceipt(List<food_items> selected_foods, double totalPrice, double change, double payment)
         {
             int numSpace = 0;
             string spaces = "";
@@ -97,7 +95,8 @@ namespace SimplePOSCafe
                 sw.WriteLine("             RECEIPT             ");
                 sw.WriteLine("            Lei's cafe           ");
                 sw.WriteLine("          Sample Address         ");
-                sw.WriteLine($"      {dtnow}                   ");
+                sw.WriteLine($"            {dtnow.ToShortDateString()}                   ");
+                sw.WriteLine($"             {dtnow.ToShortTimeString()}                   ");
                 sw.WriteLine(" ———————————————————————————————— ");
                 sw.WriteLine();
                 sw.WriteLine("ID  | x Name and Food Price");
@@ -110,15 +109,15 @@ namespace SimplePOSCafe
                     sw.WriteLine($"{food.food_id()} | {food.name()}{spaces}: Php{food.price()}");
                 }
                 sw.WriteLine(" ———————————————————————————————— ");
-                sw.WriteLine($"Total:                   Php{totalPrice}");
-                sw.WriteLine($"Amount Paid:             Php{payment}");
-                sw.WriteLine($"Change:                  Php{change}");
+                sw.WriteLine($"Total                  : Php{totalPrice}");
+                sw.WriteLine($"Amount Paid            : Php{payment}");
+                sw.WriteLine($"Change                 : Php{change}");
                 sw.WriteLine(" ———————————————————————————————— ");
                 sw.WriteLine("Thank you. We hope you come again!");
                 sw.WriteLine(" ———————————————————————————————— ");
             }
         }
-        public void transactionHistory(string transactID, List<food_items> food_sold, int totalPrice)
+        public void transactionHistory(string transactID, List<food_items> food_sold, double totalPrice)
         {
             string fileName = "Transaction History.csv";
             

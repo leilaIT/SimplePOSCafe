@@ -32,21 +32,38 @@ namespace SimplePOSCafe
                                 tempArr[x] += tempWord[i];
                         }
                     }
-                    foods.Add(new food_items(tempArr[0], tempArr[1], int.Parse(tempArr[2])));
+                    foods.Add(new food_items(tempArr[0], tempArr[1], double.Parse(tempArr[2])));
                 }
             }
         }
         public void displayContents()
         {
+            int numSpace = 0;
+            string spaces = "";
+            int maxSpace = 0;
+            string foodChar = "";
+
             foreach(food_items food in foods)
-                Console.WriteLine($"{food.food_id()} | {food.name()}: Php{food.price()}");
+            {
+                foodChar = food.food_id() + " | " + food.name();
+                if (maxSpace < foodChar.Length)
+                    maxSpace = foodChar.Length;
+            }
+            foreach (food_items food in foods)
+            {
+                numSpace = maxSpace - (food.food_id().Length + food.name().Length + food.price().ToString().Length);
+                if (numSpace < 0)
+                    numSpace = 0;
+                spaces = new string(' ', numSpace);
+                Console.WriteLine($"{food.food_id()} | {food.name()}{spaces} : Php{food.price()}");
+            }
         }
         public List<food_items> getFoods(List<food_items> selected)
         {
             string choice = "";
             choice = getFoodInput("");
             int quant = 0;
-            int amount = 0;
+            double amount = 0;
             string nameNum = "";
 
             quant = getFoodQuant(quant);

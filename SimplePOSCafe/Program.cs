@@ -15,7 +15,7 @@ namespace SimplePOSCafe
     internal class Program
     {
         static List<food_items> selected_foods = new List<food_items>();
-        static int totalPrice = 0;
+        static double totalPrice = 0;
         static order ordr = new order();
 
         static void Main(string[] args)
@@ -23,7 +23,8 @@ namespace SimplePOSCafe
             POS();
 
             Console.WriteLine("Thank you. We hope you come again!\nPress any key to exit. . .");
-            ordr.transactionHistory(readTransactFile(), selected_foods, totalPrice);
+            if(selected_foods.Count > 0)
+                ordr.transactionHistory(readTransactFile(), selected_foods, totalPrice);
             Console.ReadKey();
         }
         static void POS()
@@ -37,11 +38,11 @@ namespace SimplePOSCafe
                 Console.Clear();
                 ans = startMenu();
 
-                //choose which food option
                 if (ans == "A")
-                    foodOption(drinks, ConsoleColor.DarkYellow);
+                    foodOption("DRINKS", drinks, ConsoleColor.DarkYellow, ConsoleColor.Yellow);
                 else if (ans == "B")
-                    foodOption(desserts, ConsoleColor.DarkGreen);
+                    foodOption("DESSERTS", desserts, ConsoleColor.DarkGreen, ConsoleColor.Green);
+                
                 else if (ans == "C")
                 {
                     if (selected_foods.Count > 0)
@@ -59,6 +60,10 @@ namespace SimplePOSCafe
                 {
                     Console.Clear();
                     break;
+                }
+                else if (ans == "E")
+                {
+                    
                 }
             }
         }
@@ -82,10 +87,14 @@ namespace SimplePOSCafe
             }
             return transactID;
         }
-        static void foodOption(allFood fOption, ConsoleColor fColor)
+        static void foodOption(string category, allFood fOption, ConsoleColor fColor, ConsoleColor bColor)
         {
-            Console.ForegroundColor = fColor;
             Console.Clear();
+            Console.BackgroundColor = bColor;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine(category);
+            Console.ResetColor();
+            Console.ForegroundColor = fColor;
             fOption.displayContents();
             Console.ResetColor();
 
@@ -109,9 +118,11 @@ namespace SimplePOSCafe
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.WriteLine("Welcome to Lei's Cafe");
                 Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("Please refer to the menu below to view our available treats\n" +
-                                  "What do you want to do?\n" +
-                                  "Type here: ");
+                                  "What do you want to do?");
+                Console.ResetColor();
+                Console.WriteLine("Type here: ");
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("\n[A] View Drinks");
                 Console.ResetColor();
